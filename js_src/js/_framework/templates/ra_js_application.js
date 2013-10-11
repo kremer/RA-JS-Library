@@ -2,12 +2,12 @@
 =              ${name}                
 ============================================
 /*
- * @Application ${name}
+ * @Application ${namespace}
  * @author ${user} - ${email}
  * @created ${date}
  *
  ==========================================*/
-${name} = (function(Backbone, Marionette) {
+${namespace} = (function(Backbone, Marionette) {
 
 	var App = new Backbone.Marionette.Application();
 	App.$modal = $('#global-modal'); // -include if you wish to have a modal
@@ -51,7 +51,7 @@ ${name} = (function(Backbone, Marionette) {
 
 	//Before Initializer
 	App.addInitializer(function(options) {
-		App.layout = new AppLayout();
+		App.layout = new ${namespace}.${namespace}Layout();
 
 		//add your regions of your app
 		this.addRegions({
@@ -142,7 +142,7 @@ ${name} = (function(Backbone, Marionette) {
 })(Backbone, Marionette);
 
 //APPLICATION CONTROLLER
-${name}.AppController = (function(App, Marionette) {
+${namespace}.AppController = (function(App, Marionette) {
 
 	var AppController = Marionette.Controller.extend({
 		constructor: function(options) {
@@ -172,5 +172,5 @@ ${name}.AppController = (function(App, Marionette) {
 
 	});
 	return AppController;
-})(${name}, Marionette);
-window.runningApp = ${name};//set the running application
+})(${namespace}, Marionette);
+window.runningApp = ${namespace};//set the running application

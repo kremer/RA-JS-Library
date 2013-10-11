@@ -13,6 +13,12 @@ module.exports = function(grunt) {
         var file = grunt.file.read(path + 'build.properties');
         return file.split('sf.password=')[1].split('\n')[0];
     };
+    that.getServerFromBuild = function(path) {
+        if(isNothing(path))
+            path = that.buildPropertiesPath;
+        var file = grunt.file.read(path + 'build.properties');
+        return file.split('sf.server=')[1].split('\n')[0];
+    };
     that.getNameFromBuild = function(path) {
         if(isNothing(path))
             path = that.buildPropertiesPath;
@@ -31,6 +37,11 @@ module.exports = function(grunt) {
         var file = grunt.file.read(path + 'build.properties');
         return file.split('namespace=')[1].split('\n')[0];
     };
+    that.getNamespaceFromPackage = function(path) {
+        if(isNothing(path))
+            path = that.buildPropertiesPath;
+        return (grunt.file.readJSON('package.json')).Namespace;
+    }
 
     // project configuration.
     grunt.initConfig({
@@ -49,7 +60,7 @@ module.exports = function(grunt) {
         },
         concat: {
             js: {
-                src: ['js/_framework/*.js', 'js/packages/*/*/*.js', 'js/*/*.js', 'js/*.js', 'js/*/*/*.js', '!js/_framework/lib/*', '!js/_framework/templates/*'],
+                src: ['js/_framework/*.js', 'js/packages/*/*/*.js', 'js/*/*.js', 'js/*.js', 'js/*/*/*.js', 'js/*/*/*/*.js', '!js/_framework/lib/*', '!js/_framework/templates/*'],
                 dest: 'tmp/js/app_scripts.js'
             },
             jslib: {
@@ -61,13 +72,13 @@ module.exports = function(grunt) {
                 dest: 'tmp/css/lib_styles.css'
             },
             html: {
-                src: ['js/*/templates/*.html', 'js/packages/*/templates/*.html'],
+                src: ['js/*/templates/*.html', 'js/modules/*/templates/*.html', 'js/packages/*/templates/*.html'],
                 dest: 'tmp/templates/app_templates.html'
             }
         },
         uglify: {
             options: {
-                banner: '/*! '+ that.getNamespaceFromBuild('../') +' <%= grunt.template.today("dd-mm-yyyy") %> */\n'
+                banner: '/*! '+ that.getNamespaceFromPackage() +' <%= grunt.template.today("dd-mm-yyyy") %> */\n'
             },
             build: {
                 files: {
@@ -93,7 +104,24 @@ module.exports = function(grunt) {
                     base: 'tmp/'
                 },
                 src: ['tmp'],
-                dest: 'build/staticresources/'+ that.getNamespaceFromBuild('../') +'.resource'
+                dest: 'build/staticresources/'+ that.getNamespaceFromPackage() +'.resource'
+            }
+        },
+        compress: {
+            // example build target for static resources
+            main: {
+                options: {
+                    mode: 'zip',
+                    archive: 'build/staticresources/<%= pkg.name %>.resource'
+                },
+                files: [
+                    //{src: ['tmp/**'], dest: '', filter: 'isFile'}, // includes files in path
+                    {expand: true, cwd: 'tmp/', src: ['**'], dest: ''} // makes all src relative to cwd
+                    //{flatten: true, src: ['path/**'], dest: 'internal_folder4/', filter: 'isFile'} // flattens results to a single level
+                ]
+
+               // src: ['./tmp/css/**'],
+               // dest: ''
             }
         },
         copy: {
@@ -119,6 +147,14 @@ module.exports = function(grunt) {
                     cwd: 'js/_framework/lib/css/images/',
                     src: ['*'],
                     dest: 'tmp/css/images'
+                }]
+            },
+            fonts: {
+                files: [{
+                    expand: true,
+                    cwd: 'fonts/',
+                    src: ['*'],
+                    dest: 'tmp/fonts'
                 }]
             },
             img: {
@@ -162,7 +198,7 @@ module.exports = function(grunt) {
             application: {
                 user: that.getUsernameFromBuild('../'), // pass path to location of build.properties
                 pass: that.getPasswordFromBuild('../'), // pass path to location of build.properties
-                serverurl: 'https://login.salesforce.com',
+                serverurl: that.getServerFromBuild('../'),
                 pkg: {
                     staticresource: ['*']
                 }
@@ -181,6 +217,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-zipstream');
     grunt.loadNpmTasks('grunt-ant-sfdc');
     //grunt.loadNpmTasks('grunt-htmlcompressor');
@@ -199,13 +236,14 @@ module.exports = function(grunt) {
         grunt.file.write(dest, sr.join('\n'));
     });
 
-    grunt.registerTask('testfile', 'test stuff', function() {
-        //that.getUsernameFromBuild('../');
+    grunt.registerTask('testaccess', 'test stuff', function() {
         grunt.log.writeln(that.getUsernameFromBuild('../'));
+        grunt.log.writeln(that.getPasswordFromBuild('../'));
+        grunt.log.writeln(that.getServerFromBuild('../'));
     });
 
     // default task (no deploy)
-    grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'copy:css', 'copy:cssLibImages', 'copy:cssLibImages2', 'copy:img', 'zip', 'write-meta', 'copy:resource']);
+    grunt.registerTask('default', ['clean', 'jshint', 'concat', 'uglify', 'copy:css','copy:fonts','copy:cssLibImages', 'copy:cssLibImages2', 'copy:img', 'compress', 'write-meta', 'copy:resource']);
 
     //basic local grunt
     grunt.registerTask('local', ['clean', 'concat', 'copy:css', 'copy:img']);
@@ -219,7 +257,7 @@ module.exports = function(grunt) {
             var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
             var user = that.getNameFromBuild();
             var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromBuild();
+            var namespace = that.getNamespaceFromPackage();
 
             replaces = [{
                 i: '\\${name}',
@@ -241,13 +279,13 @@ module.exports = function(grunt) {
                 o: timestamp
             }];
             createFileFromTemplate({
-                path: 'js/' + module + '/views/',
+                path: 'js/modules/' + module + '/views/',
                 template: 'itemViewJS',
                 fileName: itemviewName + 'View.js',
                 replaces: replaces
             });
             createFileFromTemplate({
-                path: 'js/' + module + '/templates/',
+                path: 'js/modules/' + module + '/templates/',
                 template: 'itemViewHtml',
                 fileName: itemviewName + 'View.html',
                 replaces: replaces
@@ -264,7 +302,7 @@ module.exports = function(grunt) {
             var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
             var user = that.getNameFromBuild();
             var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromBuild();
+            var namespace = that.getNamespaceFromPackage();
 
             replaces = [{
                 i: '\\${name}',
@@ -286,19 +324,19 @@ module.exports = function(grunt) {
                 o: timestamp
             }];
             createFileFromTemplate({
-                path: 'js/' + module + '/views/',
+                path: 'js/modules/' + module + '/views/',
                 template: 'compositeViewJS',
                 fileName: compositeviewName + 'View.js',
                 replaces: replaces
             });
             createFileFromTemplate({
-                path: 'js/' + module + '/templates/',
+                path: 'js/modules/' + module + '/templates/',
                 template: 'compositeItemViewHTML',
                 fileName: compositeviewName + 'ItemView.html',
                 replaces: replaces
             });
             createFileFromTemplate({
-                path: 'js/' + module + '/templates/',
+                path: 'js/modules/' + module + '/templates/',
                 template: 'compositeViewHTML',
                 fileName: compositeviewName + 'CompositeView.html',
                 replaces: replaces
@@ -315,7 +353,7 @@ module.exports = function(grunt) {
             var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
             var user = that.getNameFromBuild();
             var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromBuild();
+            var namespace = that.getNamespaceFromPackage();
             replaces = [{
                 i: '\\${name}',
                 o: moduleName
@@ -360,21 +398,54 @@ module.exports = function(grunt) {
         }
     });
 
+    //create the application page
+    grunt.registerTask('applicationPage', function() {
+        //debugger;
+        var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
+        var user = that.getNameFromBuild();
+        var email = that.getEmailFromBuild();
+        var namespace = that.getNamespaceFromPackage();
+
+        replaces = [{
+            i: '\\${namespace}',
+            o: namespace
+        }, {
+            i: '\\${user}',
+            o: user
+        }, {
+            i: '\\${email}',
+            o: email
+        }, {
+            i: '\\${date}',
+            o: timestamp
+        }];
+        createFileFromTemplate({
+            path: '../src/pages/',
+            template: 'applicationPage',
+            fileName: namespace + '.page',
+            replaces: replaces
+        });
+        createFileFromTemplate({
+            path: '../src/pages/',
+            template: 'applicationPageMeta',
+            fileName: namespace + '.page-meta.xml',
+            replaces: replaces
+        });
+        
+    });
+
  //create module
     grunt.registerTask('app', function(appName) {
         //debugger;
-        if (arguments.length === 0) {
+        if (arguments.length === 0 ) {
             grunt.log.writeln(this.name + ", no name given for application. Ex: grunt app:Main");
         } else {
             var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
             var user = that.getNameFromBuild();
             var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromBuild();
+            var namespace = that.getNamespaceFromPackage();
             replaces = [{
                 i: '\\${name}',
-                o: appName + 'App'
-            },{
-                i: '\\${app}',
                 o: appName + 'App'
             }, {
                 i: '\\${namespace}',

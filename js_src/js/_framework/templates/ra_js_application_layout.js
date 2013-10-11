@@ -5,8 +5,8 @@
  *
  */
 
-${name}.${name}Layout = Backbone.Marionette.Layout.extend({
-	template: '${name}Layout',
+${namespace}.${namespace}Layout = Backbone.Marionette.Layout.extend({
+	template: '${namespace}Layout',
 
 	events: {},
 
