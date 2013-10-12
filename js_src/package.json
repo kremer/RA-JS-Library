@@ -10,7 +10,7 @@
     "grunt-contrib-compress": "*",
     "grunt-zipstream": "*",
     "grunt-contrib-copy": "~0.4.0",
-    "grunt-ant-sfdc": "*"
+    "grunt-ant-sfdc": "0.1.3"
   },
   "author": {
     "name": "Red Argyle",
