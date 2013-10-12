@@ -41,7 +41,7 @@ module.exports = function(grunt) {
         if(isNothing(path))
             path = that.buildPropertiesPath;
         return (grunt.file.readJSON('package.json')).Namespace;
-    }
+    };
 
     // project configuration.
     grunt.initConfig({
