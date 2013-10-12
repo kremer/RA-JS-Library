@@ -7,6 +7,7 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-concat": "*",
     "grunt-contrib-clean": "*",
+    "grunt-contrib-compress": "*",
     "grunt-zipstream": "*",
     "grunt-contrib-copy": "~0.4.0",
     "grunt-ant-sfdc": "*"
@@ -33,7 +34,9 @@
       "layoutHTML": "ra_js_layout.html",
       "compositeViewJS": "ra_js_composite_view.js",
       "compositeViewHTML": "ra_js_composite_view.html",
-      "compositeItemViewHTML": "ra_js_item_view.html"
+      "compositeItemViewHTML": "ra_js_item_view.html",
+      "applicationPage": "ra_page_application.page",
+      "applicationPageMeta": "ra_page_application.page-meta.xml"
     }
   },
   "Namespace" : "Application"

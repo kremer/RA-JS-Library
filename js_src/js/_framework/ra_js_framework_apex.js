@@ -414,7 +414,7 @@ function serviceHandler(options) {
 			thatService.successCallback(data, options.context);
 		} else {
 			console.log(error);
-			if (!isNothing(window.runningApp) && options.service != 'JavascriptErrorService.createError') {
+			if (!isNothing(JavascriptErrorService) && !isNothing(window.runningApp) && options.service != 'JavascriptErrorService.createError') {
 				window.runningApp.vent.trigger('CallService:error', {
 					data: data,
 					error: error,

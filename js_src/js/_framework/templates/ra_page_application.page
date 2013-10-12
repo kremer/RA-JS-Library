@@ -1,6 +1,6 @@
 <apex:page cache="false" expires="0" standardStylesheets="false" showHeader="false" sidebar="false">
 <!--/*
- * @Application Page ${name}
+ * @Application Page ${namespace}
  * @author ${user} - ${email}
  * @created ${date}
  *
@@ -26,7 +26,6 @@
 
        <!-- if you use the Service model with remoteActions, include here -->
        <!--c:include_Service /-->
-       <!--c:include_JavascriptErrorService /-->
     </head>    
     <body>
        <div id="body"></div>    
@@ -50,14 +49,12 @@
        <script>
           //load templates
           $(function() {
-            window.sessionId = '{!$Api.Session_ID}';
-            window.logoutUrlString = String('{!$CurrentPage.Url}').split('.com')[0] + '.com/secur/logout.jsp';
              //initalize RA JS framework
              initialize();
 
              //set the system vars here using custom settings that have 
              //Variable_Value__c and Variable_Name__c as Text fields to drop in
-             //Custom Settings to the JS Side.
+             //Custom Settings to the JS Side. You need to set this up in Salesforce
              /*callService({
                  service : 'Service.getCustomSettings',
                  params : ['MySettings__c'],
@@ -75,8 +72,6 @@
                 names : ["app_templates"],
                 callback : function() {
                     //kick off the app
-                    //SERVICE_TEST = false;
-                    TestDataModule.start();
                     ${namespace}.start();//Name Of your Application
                 }
              });
