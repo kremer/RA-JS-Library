@@ -1,4 +1,4 @@
-global with sharing class DatagridSelector extends SObjectSelector{
+global with sharing class DatagridSelector extends ra_SObjectSelector{
 	global DatagridSelector() {  }
 	global List<sObject> records;
 	global Integer totalRecords;

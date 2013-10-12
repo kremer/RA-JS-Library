@@ -56,7 +56,7 @@ global with sharing class Service {
 			List<Schema.SObjectType> SERVICE_SOBJECTS = new List<Schema.SObjectType>{
 				sObjects[0].getSObjectType()
 			};
-			SObjectUnitOfWork uow = new SObjectUnitOfWork(SERVICE_SOBJECTS);
+			fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(SERVICE_SOBJECTS);
 
 			uow.registerMixed(sObjects);
 
@@ -102,7 +102,7 @@ global with sharing class Service {
 			List<Schema.SObjectType> SERVICE_SOBJECTS = new List<Schema.SObjectType>{
 				sObjects[0].getSObjectType()
 			};
-			SObjectUnitOfWork uow = new SObjectUnitOfWork(SERVICE_SOBJECTS);
+			fflib_SObjectUnitOfWork uow = new fflib_SObjectUnitOfWork(SERVICE_SOBJECTS);
 			uow.registerDeleted(sObjects);
 			uow.commitWork();
 			return result.setRecords(sObjects);

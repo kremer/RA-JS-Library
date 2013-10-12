@@ -49,7 +49,6 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			{
 				Opportunity opp = new Opportunity();
 				opp.Name = 'UoW Test Name ' + o;
-				opp.Other_Need_Details__c = 'UoW Test Name ' + o;
 				opp.StageName = 'Open';
 				opp.CloseDate = System.today();
 				uow.registerNew(opp);		
@@ -81,7 +80,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// System.assertEquals(5 /* Oddly a setSavePoint consumes a DML */, Limits.getDmlStatements());				
 
 		// Records to update
-		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems) from Opportunity where Other_Need_Details__c like 'UoW Test Name %' order by Name];
+		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems) from Opportunity where Name like 'UoW Test Name %' order by Name];
 		
 		// Update some records with UnitOfWork
 		{
@@ -113,7 +112,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// TODO: Need to re-instate this check with a better approach, as it is not possible when 
 		//       product triggers contribute to DML (e.g. in sample app Opportunity trigger)		
 		// System.assertEquals(11, Limits.getDmlStatements());				
-		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity from OpportunityLineItems Order By PricebookEntry.Product2.Name desc) from Opportunity where Other_Need_Details__c like 'UoW Test Name %' order by Name];
+		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity from OpportunityLineItems Order By PricebookEntry.Product2.Name desc) from Opportunity where Name like 'UoW Test Name %' order by Name];
 		System.assertEquals(10, opps.size());
 		System.assert(opps[0].Name.contains('Changed'));
 		System.assertEquals(2, opps[0].OpportunityLineItems.size());
@@ -133,7 +132,7 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 		// TODO: Need to re-instate this check with a better approach, as it is not possible when 
 		//       product triggers contribute to DML (e.g. in sample app Opportunity trigger)		
 		// System.assertEquals(15, Limits.getDmlStatements());		
-		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity from OpportunityLineItems Order By PricebookEntry.Product2.Name) from Opportunity where Other_Need_Details__c like 'UoW Test Name %' order by Name];
+		opps = [select Id, Name, (Select Id, PricebookEntry.Product2.Name, Quantity from OpportunityLineItems Order By PricebookEntry.Product2.Name) from Opportunity where Name like 'UoW Test Name %' order by Name];
 		List<Product2> prods = [Select Id from Product2 where Name like '%Changed : New Product'];
 		System.assertEquals(10, opps.size());
 		System.assert(opps[0].Name.contains('Changed'));
@@ -153,7 +152,6 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			for(Integer o=0; o<10; o++)
 			{
 				Opportunity opp = new Opportunity();
-				opp.Other_Need_Details__c = 'UoW Test Name ' + o;
 				opp.Name = 'UoW Test Name ' + o;
 				opp.StageName = 'Open';
 				opp.CloseDate = System.today();
@@ -195,7 +193,6 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 			for(Integer o=0; o<10; o++)
 			{
 				Opportunity opp = new Opportunity();
-				opp.Other_Need_Details__c = 'NoUoW Test Name ' + o;
 				opp.Name = 'NoUoW Test Name ' + o;
 				opp.StageName = 'Open';
 				opp.CloseDate = System.today();
@@ -278,10 +275,9 @@ private with sharing class fflib_SObjectUnitOfWorkTest
 	{
 		// Standard Assertions on tests data inserted by tests
 		String filter = prefix + ' Test Name %';
-		//moved the filter to Other_Need_Details__c as we have workflow that name these. 
-		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems) from Opportunity where Other_Need_Details__c like :filter order by Name];
+		List<Opportunity> opps = [select Id, Name, (Select Id from OpportunityLineItems) from Opportunity where Name like :filter order by Name];
 		system.debug('***show query results');
-		system.debug([select Id, Name, Other_Need_Details__c, (Select Id from OpportunityLineItems) from Opportunity]);
+		system.debug([select Id, Name, (Select Id from OpportunityLineItems) from Opportunity]);
 		System.assertEquals(10, opps.size());
 		System.assertEquals(1, opps[0].OpportunityLineItems.size());		
 		System.assertEquals(2, opps[1].OpportunityLineItems.size());		
