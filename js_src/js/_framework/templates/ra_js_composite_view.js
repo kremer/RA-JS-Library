@@ -4,19 +4,19 @@
  * @created ${date}
  *
  */
-${namespace}.module("${module}Module", function(${module}Module, App, Backbone, Marionette, $, _) {
+${appName}.module("${module}", function(${module}, App, Backbone, Marionette, $, _) {
 
-	${module}Module.${name}ItemView = Backbone.Marionette.ItemView.extend({
+	${module}.${name}ItemView = Backbone.Marionette.ItemView.extend({
 		template: '${module}${name}ItemView',
-		tagName: 'tr', //'div' or what you want this view to render under
-		className: '', //class name to the wrapper of this, span3? well?
+		tagName: 'tr', //Whatever wrapper element you want the itemview to render in. Ex:'div'
+		className: '', //Class name to apply to the wrapper element
 		events: {},
 
 		onRender: function() {}
 
 	});
 
-	${module}Module.${name}CompositeView = Backbone.Marionette.CompositeView.extend({
+	${module}.${name}CompositeView = Backbone.Marionette.CompositeView.extend({
 		template: '${module}${name}CompositeView',
 
 		events: {},
@@ -24,7 +24,7 @@ ${namespace}.module("${module}Module", function(${module}Module, App, Backbone, 
 		onShow: function() {},
 
 		itemViewContainer: 'tbody',//where do you wish to render this within the composite template
-		itemView: ${module}Module.${name}ItemView
+		itemView: ${module}.${name}ItemView
 
 	});
 

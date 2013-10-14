@@ -4,9 +4,9 @@
  * @created ${date}
  *
  */
-${namespace}.module("${module}Module", function(${module}Module, App, Backbone, Marionette, $, _) {
+${appName}.module("${module}", function(${module}, App, Backbone, Marionette, $, _) {
 
-	${module}Module.${name}Layout = Backbone.Marionette.Layout.extend({
+	${module}.${name}Layout = Backbone.Marionette.Layout.extend({
 		template: '${name}Layout',
 
 		events: {},

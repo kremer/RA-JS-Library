@@ -1,12 +1,12 @@
 /*
- * @class ${name}Layout
+ * @class ${appName}Layout
  * @author ${user} - ${email}
  * @created ${date}
  *
  */
 
-${namespace}.${namespace}Layout = Backbone.Marionette.Layout.extend({
-	template: '${namespace}Layout',
+${appName}.${appName}Layout = Backbone.Marionette.Layout.extend({
+	template: '${appName}Layout',
 
 	events: {},
 

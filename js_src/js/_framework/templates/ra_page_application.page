@@ -25,7 +25,7 @@
        <link rel="stylesheet" href="{!URLFOR($RESOURCE.${namespace})}/css/glyphicon-free.css" />
 
        <!-- if you use the Service model with remoteActions, include here -->
-       <!--c:include_Service /-->
+       <c:include_Service />
     </head>    
     <body>
        <div id="body"></div>    
@@ -72,7 +72,7 @@
                 names : ["app_templates"],
                 callback : function() {
                     //kick off the app
-                    ${namespace}.start();//Name Of your Application
+                    ${appName}.start();//Name Of your Application
                 }
              });
 

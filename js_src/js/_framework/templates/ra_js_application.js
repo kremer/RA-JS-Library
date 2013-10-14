@@ -1,13 +1,13 @@
 /*==========================================
-=              ${name}                
+=              ${appName}                
 ============================================
 /*
- * @Application ${namespace}
+ * @Application ${appName}
  * @author ${user} - ${email}
  * @created ${date}
  *
  ==========================================*/
-${namespace} = (function(Backbone, Marionette) {
+${appName} = (function(Backbone, Marionette) {
 
 	var App = new Backbone.Marionette.Application();
 	App.$modal = $('#global-modal'); // -include if you wish to have a modal
@@ -47,11 +47,12 @@ ${namespace} = (function(Backbone, Marionette) {
 			App.currentApps[region] = newApp;
 			newApp.start(args);
 		}
+		return newApp;
 	};
 
 	//Before Initializer
 	App.addInitializer(function(options) {
-		App.layout = new ${namespace}.${namespace}Layout();
+		App.layout = new ${appName}.${appName}Layout();
 
 		//add your regions of your app
 		this.addRegions({
@@ -142,7 +143,7 @@ ${namespace} = (function(Backbone, Marionette) {
 })(Backbone, Marionette);
 
 //APPLICATION CONTROLLER
-${namespace}.AppController = (function(App, Marionette) {
+${appName}.AppController = (function(App, Marionette) {
 
 	var AppController = Marionette.Controller.extend({
 		constructor: function(options) {
@@ -172,5 +173,5 @@ ${namespace}.AppController = (function(App, Marionette) {
 
 	});
 	return AppController;
-})(${namespace}, Marionette);
-window.runningApp = ${namespace};//set the running application
+})(${appName}, Marionette);
+window.runningApp = ${appName};//set the running application

@@ -248,165 +248,22 @@ module.exports = function(grunt) {
     //basic local grunt
     grunt.registerTask('local', ['clean', 'concat', 'copy:css', 'copy:img']);
 
-    //create new view
-    grunt.registerTask('itemview', function(module, itemviewName) {
-        //debugger;
-        if (arguments.length === 0) {
-            grunt.log.writeln(this.name + ", no args");
-        } else {
-            var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
-            var user = that.getNameFromBuild();
-            var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromPackage();
-
-            replaces = [{
-                i: '\\${name}',
-                o: itemviewName
-            }, {
-                i: '\\${module}',
-                o: module
-            }, {
-                i: '\\${namespace}',
-                o: namespace
-            }, {
-                i: '\\${user}',
-                o: user
-            }, {
-                i: '\\${email}',
-                o: email
-            }, {
-                i: '\\${date}',
-                o: timestamp
-            }];
-            createFileFromTemplate({
-                path: 'js/modules/' + module + '/views/',
-                template: 'itemViewJS',
-                fileName: itemviewName + 'View.js',
-                replaces: replaces
-            });
-            createFileFromTemplate({
-                path: 'js/modules/' + module + '/templates/',
-                template: 'itemViewHtml',
-                fileName: itemviewName + 'View.html',
-                replaces: replaces
-            });
-        }
-    });
-
-    //create new composite view
-    grunt.registerTask('compositeview', function(module, compositeviewName) {
-        //debugger;
-        if (arguments.length === 0) {
-            grunt.log.writeln(this.name + ", no args");
-        } else {
-            var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
-            var user = that.getNameFromBuild();
-            var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromPackage();
-
-            replaces = [{
-                i: '\\${name}',
-                o: compositeviewName
-            }, {
-                i: '\\${module}',
-                o: module
-            }, {
-                i: '\\${namespace}',
-                o: namespace
-            }, {
-                i: '\\${user}',
-                o: user
-            }, {
-                i: '\\${email}',
-                o: email
-            }, {
-                i: '\\${date}',
-                o: timestamp
-            }];
-            createFileFromTemplate({
-                path: 'js/modules/' + module + '/views/',
-                template: 'compositeViewJS',
-                fileName: compositeviewName + 'View.js',
-                replaces: replaces
-            });
-            createFileFromTemplate({
-                path: 'js/modules/' + module + '/templates/',
-                template: 'compositeItemViewHTML',
-                fileName: compositeviewName + 'ItemView.html',
-                replaces: replaces
-            });
-            createFileFromTemplate({
-                path: 'js/modules/' + module + '/templates/',
-                template: 'compositeViewHTML',
-                fileName: compositeviewName + 'CompositeView.html',
-                replaces: replaces
-            });
-        }
-    });
-
-    //create module
-    grunt.registerTask('module', function(moduleName) {
-        //debugger;
-        if (arguments.length === 0) {
-            grunt.log.writeln(this.name + ", no args");
-        } else {
-            var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
-            var user = that.getNameFromBuild();
-            var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromPackage();
-            replaces = [{
-                i: '\\${name}',
-                o: moduleName
-            },{
-                i: '\\${module}',
-                o: moduleName
-            }, {
-                i: '\\${namespace}',
-                o: namespace
-            }, {
-                i: '\\${user}',
-                o: user
-            }, {
-                i: '\\${email}',
-                o: email
-            }, {
-                i: '\\${date}',
-                o: timestamp
-            }];
-
-            createFileFromTemplate({
-                path: 'js/modules/' + moduleName + '/',
-                template: 'moduleJS',
-                fileName: moduleName + 'Module.js',
-                replaces: replaces
-            });
-
-            createFileFromTemplate({
-                path: 'js/modules/' + moduleName + '/layouts/',
-                template: 'layoutJS',
-                fileName: moduleName + 'Layout.js',
-                replaces: replaces
-            });
-
-            createFileFromTemplate({
-                path: 'js/modules/' + moduleName + '/templates/',
-                template: 'layoutHTML',
-                fileName: moduleName + 'Layout.html',
-                replaces: replaces
-            });
-
-        }
-    });
-
-    //create the application page
-    grunt.registerTask('applicationPage', function() {
+    //create application
+    grunt.registerTask('application', function() {
         //debugger;
         var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
         var user = that.getNameFromBuild();
         var email = that.getEmailFromBuild();
         var namespace = that.getNamespaceFromPackage();
+        var appName = namespace+'App';
+
+        if ((arguments.length == 1 && arguments[0] !== 'true') || arguments.length == 2)
+            appName = arguments[0];
 
         replaces = [{
+            i: '\\${appName}',
+            o: appName
+        }, {
             i: '\\${namespace}',
             o: namespace
         }, {
@@ -419,73 +276,227 @@ module.exports = function(grunt) {
             i: '\\${date}',
             o: timestamp
         }];
+
         createFileFromTemplate({
-            path: '../src/pages/',
-            template: 'applicationPage',
-            fileName: namespace + '.page',
+            path: 'js/' + appName + '/',
+            template: 'applicationJS',
+            fileName: appName + '.js',
             replaces: replaces
         });
+
         createFileFromTemplate({
-            path: '../src/pages/',
-            template: 'applicationPageMeta',
-            fileName: namespace + '.page-meta.xml',
+            path: 'js/' + appName + '/layouts/',
+            template: 'applicationLayoutJS',
+            fileName: appName + 'Layout.js',
             replaces: replaces
         });
-        
-    });
 
- //create module
-    grunt.registerTask('app', function(appName) {
-        //debugger;
-        if (arguments.length === 0 ) {
-            grunt.log.writeln(this.name + ", no name given for application. Ex: grunt app:Main");
-        } else {
-            var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
-            var user = that.getNameFromBuild();
-            var email = that.getEmailFromBuild();
-            var namespace = that.getNamespaceFromPackage();
-            replaces = [{
-                i: '\\${name}',
-                o: appName + 'App'
-            }, {
-                i: '\\${namespace}',
-                o: namespace
-            }, {
-                i: '\\${user}',
-                o: user
-            }, {
-                i: '\\${email}',
-                o: email
-            }, {
-                i: '\\${date}',
-                o: timestamp
-            }];
+        createFileFromTemplate({
+            path: 'js/' + appName + '/templates/',
+            template: 'applicationLayoutHTML',
+            fileName: appName + 'Layout.html',
+            replaces: replaces
+        });
 
+        if((arguments.length == 1 && arguments[0] === 'true') || (arguments.length == 2 && arguments[1] === 'true')){
             createFileFromTemplate({
-                path: 'js/' + appName + 'App/',
-                template: 'applicationJS',
-                fileName: appName + 'App.js',
+                path: '../src/pages/',
+                template: 'applicationPage',
+                fileName: namespace + '.page',
                 replaces: replaces
             });
-
             createFileFromTemplate({
-                path: 'js/' + appName + 'App/layouts/',
-                template: 'applicationLayoutJS',
-                fileName: appName + 'AppLayout.js',
+                path: '../src/pages/',
+                template: 'applicationPageMeta',
+                fileName: namespace + '.page-meta.xml',
                 replaces: replaces
             });
-
-            createFileFromTemplate({
-                path: 'js/' + appName + 'App/templates/',
-                template: 'applicationLayoutHTML',
-                fileName: appName + 'AppLayout.html',
-                replaces: replaces
-            });
-
         }
     });
 
+    //create module
+    grunt.registerTask('module', function() {
+        //debugger;
+        var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
+        var user = that.getNameFromBuild();
+        var email = that.getEmailFromBuild();
+        var namespace = that.getNamespaceFromPackage();
+        var appName = namespace+'App';
 
+        if (arguments.length === 0 || arguments.length > 2) {
+            grunt.log.writeln(this.name + " failed! Invalid arguments. Ex: \"grunt module:ModuleName\" \nYou can also specify an application if you don't want to use the namespace, Ex: \"grunt module:AppName:ModuleName\"");
+            return;
+        }
+        else if(arguments.length == 1){
+            moduleName = arguments[0];
+        }
+        else{
+            appName = arguments[0];
+            moduleName = arguments[1];
+        }
+
+        replaces = [{
+            i: '\\${name}',
+            o: moduleName
+        },{
+            i: '\\${module}',
+            o: moduleName
+        }, {
+            i: '\\${namespace}',
+            o: namespace
+        },{
+            i: '\\${appName}',
+            o: appName
+        }, {
+            i: '\\${user}',
+            o: user
+        }, {
+            i: '\\${email}',
+            o: email
+        }, {
+            i: '\\${date}',
+            o: timestamp
+        }];
+
+        createFileFromTemplate({
+            path: 'js/modules/' + moduleName + '/',
+            template: 'moduleJS',
+            fileName: moduleName + '.js',
+            replaces: replaces
+        });
+
+        createFileFromTemplate({
+            path: 'js/modules/' + moduleName + '/layouts/',
+            template: 'layoutJS',
+            fileName: moduleName + 'Layout.js',
+            replaces: replaces
+        });
+
+        createFileFromTemplate({
+            path: 'js/modules/' + moduleName + '/templates/',
+            template: 'layoutHTML',
+            fileName: moduleName + 'Layout.html',
+            replaces: replaces
+        });
+    });
+
+    //create new composite view
+    grunt.registerTask('compositeview', function() {
+        //debugger;
+        var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
+        var user = that.getNameFromBuild();
+        var email = that.getEmailFromBuild();
+        var namespace = that.getNamespaceFromPackage();
+        var appName = namespace+'App';
+
+        if (arguments.length < 2 || arguments.length > 3) {
+            grunt.log.writeln(this.name + " failed! Invalid arguments. Ex: \"grunt compositeview:ModuleName:CompositeViewName\" \nYou can also specify an application if you don't want to use the namespace, Ex: \"grunt compositeview:AppName:ModuleName:CompositeViewName\"");
+            return;
+        }
+        else if(arguments.length == 2){
+            module = arguments[0];
+            compositeviewName = arguments[1];
+        }
+        else{
+            appName = arguments[0];
+            module = arguments[1];
+            compositeviewName = arguments[2];
+        }
+
+        replaces = [{
+            i: '\\${name}',
+            o: compositeviewName
+        }, {
+            i: '\\${module}',
+            o: module
+        }, {
+            i: '\\${appName}',
+            o: appName
+        }, {
+            i: '\\${user}',
+            o: user
+        }, {
+            i: '\\${email}',
+            o: email
+        }, {
+            i: '\\${date}',
+            o: timestamp
+        }];
+        createFileFromTemplate({
+            path: 'js/modules/' + module + '/views/',
+            template: 'compositeViewJS',
+            fileName: compositeviewName + 'View.js',
+            replaces: replaces
+        });
+        createFileFromTemplate({
+            path: 'js/modules/' + module + '/templates/',
+            template: 'compositeItemViewHTML',
+            fileName: compositeviewName + 'ItemView.html',
+            replaces: replaces
+        });
+        createFileFromTemplate({
+            path: 'js/modules/' + module + '/templates/',
+            template: 'compositeViewHTML',
+            fileName: compositeviewName + 'CompositeView.html',
+            replaces: replaces
+        });
+    });
+
+    //create new view
+    grunt.registerTask('itemview', function() {
+        //debugger;
+        var timestamp = new Date().toDateString() + ' ' + new Date().toTimeString();
+        var user = that.getNameFromBuild();
+        var email = that.getEmailFromBuild();
+        var namespace = that.getNamespaceFromPackage();
+        var appName = namespace+'App';
+
+        if (arguments.length < 2 || arguments.length > 3) {
+            grunt.log.writeln(this.name + " failed! Invalid arguments. Ex: \"grunt compositeview:ModuleName:ItemViewName\" \nYou can also specify an application if you don't want to use the namespace, Ex: \"grunt compositeview:AppName:ModuleName:ItemViewName\"");
+            return;
+        }
+        else if(arguments.length == 2){
+            module = arguments[0];
+            itemviewName = arguments[1];
+        }
+        else{
+            appName = arguments[0];
+            module = arguments[1];
+            itemviewName = arguments[2];
+        }
+
+        replaces = [{
+            i: '\\${name}',
+            o: itemviewName
+        }, {
+            i: '\\${module}',
+            o: module
+        }, {
+            i: '\\${appName}',
+            o: appName
+        }, {
+            i: '\\${user}',
+            o: user
+        }, {
+            i: '\\${email}',
+            o: email
+        }, {
+            i: '\\${date}',
+            o: timestamp
+        }];
+        createFileFromTemplate({
+            path: 'js/modules/' + module + '/views/',
+            template: 'itemViewJS',
+            fileName: itemviewName + 'View.js',
+            replaces: replaces
+        });
+        createFileFromTemplate({
+            path: 'js/modules/' + module + '/templates/',
+            template: 'itemViewHtml',
+            fileName: itemviewName + 'View.html',
+            replaces: replaces
+        });
+    });
 
     function createFileFromTemplate(options) {
 

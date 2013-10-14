@@ -52,7 +52,7 @@ sObject = sObject.extend({
 		this.getAccess = getAccess;
 		isService = false;
 		if (typeof queryOrService == 'string') {
-			if (queryOrService.indexOf('select ') !== 0) isService = true;
+			if (queryOrService.indexOf('select ') !== 0 && queryOrService.indexOf('SELECT ') !== 0) isService = true;
 		} else if (isNothing(queryOrService)) {
 			if (isNothing(this.query)) {
 				queryOrService = 'select ';
@@ -223,7 +223,7 @@ sObjects = sObjects.extend({
 		var that = this;
 		isService = false;
 		if (typeof queryOrService == 'string') {
-			if (queryOrService.indexOf('select ') !== 0) isService = true;
+			if (queryOrService.indexOf('select ') !== 0 && queryOrService.indexOf('SELECT ') !== 0) isService = true;
 		} else if (isNothing(queryOrService)) {
 			if (isNothing(this.query)) {
 				queryOrService = 'select ';
