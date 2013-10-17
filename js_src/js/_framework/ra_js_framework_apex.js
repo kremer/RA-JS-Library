@@ -52,7 +52,7 @@ sObject = sObject.extend({
 		this.getAccess = getAccess;
 		isService = false;
 		if (typeof queryOrService == 'string') {
-			if (queryOrService.indexOf('select ') !== 0 && queryOrService.indexOf('SELECT ') !== 0) isService = true;
+			if (queryOrService.toLowerCase().indexOf('select ') !== 0) isService = true;
 		} else if (isNothing(queryOrService)) {
 			if (isNothing(this.query)) {
 				queryOrService = 'select ';
@@ -223,7 +223,7 @@ sObjects = sObjects.extend({
 		var that = this;
 		isService = false;
 		if (typeof queryOrService == 'string') {
-			if (queryOrService.indexOf('select ') !== 0 && queryOrService.indexOf('SELECT ') !== 0) isService = true;
+			if (queryOrService.toLowerCase().indexOf('select ') !== 0) isService = true;
 		} else if (isNothing(queryOrService)) {
 			if (isNothing(this.query)) {
 				queryOrService = 'select ';
@@ -414,7 +414,7 @@ function serviceHandler(options) {
 			thatService.successCallback(data, options.context);
 		} else {
 			console.log(error);
-			if (!isNothing(JavascriptErrorService) && !isNothing(window.runningApp) && options.service != 'JavascriptErrorService.createError') {
+			if (!isNothing(window.JavascriptErrorService) && !isNothing(window.runningApp) && options.service != 'JavascriptErrorService.createError') {
 				window.runningApp.vent.trigger('CallService:error', {
 					data: data,
 					error: error,

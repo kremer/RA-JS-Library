@@ -60,7 +60,7 @@ module.exports = function(grunt) {
         },
         concat: {
             js: {
-                src: ['js/_framework/*.js', 'js/packages/*/*/*.js', 'js/*/*.js', 'js/*.js', 'js/*/*/*.js', 'js/*/*/*/*.js', '!js/_framework/lib/*', '!js/_framework/templates/*'],
+                src: ['js/_framework/*.js', 'js/packages/*/*/*.js', 'js/*/*.js', 'js/*.js', 'js/*/*/*.js', 'js/*/*/*/*.js', '!js/_framework/lib/*', '!js/_framework/lib/*/*', '!js/_framework/templates/*'],
                 dest: 'tmp/js/app_scripts.js'
             },
             jslib: {

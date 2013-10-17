@@ -16,7 +16,7 @@ ${appName} = (function(Backbone, Marionette) {
 	});
 
 	/*
-		startSubApp
+		startModule
 		===========
 		starting sub apps will run modules underneath regions they are being placed.
 		This will trigger the module currently running for its switch method,
@@ -25,29 +25,42 @@ ${appName} = (function(Backbone, Marionette) {
 		validation or other logic. Do not modify the function below.
 		
 	*/
-	App.startSubApp = function(appName, args) {
+	App.startModule = function(moduleName, args) {
 		var region = args.region.options.el;
-		var newApp = App.module(appName);
-		if (isNothing(App.currentApps)) App.currentApps = [];
-		if (App.currentApps[region] === newApp) {
+		var newModule = App.module(moduleName);
+		if (isNothing(App.currentModule)) App.currentModule = [];
+		if (App.currentModule[region] === newModule) {
 			return;
 		}
-		if (App.currentApps[region]) {
-			App.vent.once('module:' + App.currentApps[region].moduleName + ':switch:ready', function(options) {
-				App.currentApps[options.region].stop();
-				App.currentApps[options.region] = options.newApp;
-				options.newApp.start(args);
+		if (App.currentModule[region]) {
+			App.vent.once('module:' + App.currentModule[region].moduleName + ':switch:ready', function(options) {
+				App.currentModule[options.region].stop();
+				App.currentModule[options.region] = options.newModule;
+				options.newModule.start(args);
 			});
-			App.vent.trigger('module:' + App.currentApps[region].moduleName + ':switch', {
+			App.vent.trigger('module:' + App.currentModule[region].moduleName + ':switch', {
 				region: region,
-				newApp: newApp
+				newModule: newModule
 			});
 
 		} else {
-			App.currentApps[region] = newApp;
-			newApp.start(args);
+			App.currentModule[region] = newModule;
+			newModule.start(args);
 		}
-		return newApp;
+		return newModule;
+	};
+
+	App.stopModule = function(moduleName, args) {
+		var region = args.region.options.el;
+		var appToClose = App.module(moduleName);
+
+		if (isNothing(App.currentModule)) App.currentModule = [];
+
+		if (App.currentModule[region] === appToClose) {
+			App.currentModule[region].stop();
+			App.currentModule[region] = null;
+			args.region.$el.empty();
+		}
 	};
 
 	//Before Initializer

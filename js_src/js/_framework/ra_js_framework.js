@@ -965,15 +965,14 @@ Number.prototype.toMoney = function(decimals, decimal_sep, thousands_sep) {
 /*
  *  isNothing(value) will return if the thing you asking for is undefined, or null or empty string
  */
-
 function isNothing(value) {
-	if (value === undefined || value === null || value === '') return true;
+	if (typeof value === 'undefined' || value === undefined || value === null || value === '') return true;
 	else return false;
 }
+
 /*
  *  valueOrBlank(value) if your value exists return it, otherwise return a blank string
  */
-
 function valueOrBlank(value) {
 	if (value === undefined || value === null) return '';
 	else return value;
