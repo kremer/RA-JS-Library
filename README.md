@@ -1,25 +1,17 @@
-RA-JS-Framework
+RA-JS-Library
 ===============
 
-This is the Red Argyle Javascript Framework that lives on top of the salesforce platform utilizing Marionette, Sublime Text, and Grunt to manage javascript applications on top of the salesforce platform. 
+This is the Red Argyle Javascript Library that lives on top of the salesforce platform utilizing Marionette, Sublime Text, and Grunt to manage javascript applications on top of the salesforce platform. 
 
-1.  Make sure you get Sublime Text 3 and the Latest Mavens Mate:
+1.  Make sure you get Sublime Text 3 and the Latest [MavensMate](http://mavensmate.com/Plugins/Sublime_Text/Installation) :
 
-[http://mavensmate.com/Plugins/Sublime_Text/Installation](http://mavensmate.com/Plugins/Sublime_Text/Installation) 
+2. Install [Node JS](http://nodejs.org/) , as of writing we are using v0.10.12 and the latest is v0.10.20
 
-2. Install Node JS, as of writing we are using v0.10.12 and the latest is v0.10.20
-
-[http://nodejs.org/](http://nodejs.org/) 
-
-3. Install Grunt.js - Our Grunt file is based off the work of Kevin O’hara
-
-[http://gruntjs.com/](http://gruntjs.com/) 
-
-[http://kevinmohara.com/2013/02/25/building-and-deploying-force-com-static-resources-using-grunt-js-video/](http://kevinmohara.com/2013/02/25/building-and-deploying-force-com-static-resources-using-grunt-js-video/) 
+3. Install [Grunt.js](http://gruntjs.com/) - Our Grunt file is based off [the work of Kevin O’hara](http://kevinmohara.com/2013/02/25/building-and-deploying-force-com-static-resources-using-grunt-js-video/)
 
 Steps to set up the project:
 
-1. Pull down / fork the RA JS Framework
+1. Pull down / fork the RA JS Library
 
 2. Drag the project into the sublime text app. This will open a workspace with all the files in it. 
 

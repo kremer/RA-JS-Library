@@ -1,7 +1,7 @@
 /*******************************************************************************
- *  RA JS Framework - APEX Flavor
+ *  RA JS Library - APEX Flavor
  *
- *  This extends the RA JS Framework functionality for APEX related / SF related
+ *  This extends the RA JS Library functionality for APEX related / SF related
  *  functionality
  *
  *  @supportedBackendLanguages PHP, Salesforce Apex

@@ -1,9 +1,9 @@
 /*******************************************************************************
- *  RA JS Framework
+ *  RA JS Library
  *
- *  This Framework is designed to manipulate inputs and outputs based on objects
+ *  This Library is designed to manipulate inputs and outputs based on objects
  *  This allows validation and formatting based on extended flavors of this
- *  framework to sync with various backend services.
+ *  Library to sync with various backend services.
  *
  *  @supportedBackendLanguages PHP, Salesforce Apex
  *  @roadmapLanguages Ruby, iOS, Android
@@ -659,7 +659,7 @@ var sObject = Backbone.Model.extend({
 	//    }
 });
 
-//FRAMEWORK INITIALIZER
+//LIBRARY INITIALIZER
 var BLOCK_NAV = false;
 var BLOCK_NAV_ONCE = false;
 var BLOCK_NAV_MESSAGE = 'Sorry but navigation is blocked due to the page. Please read the page for what to do.';
